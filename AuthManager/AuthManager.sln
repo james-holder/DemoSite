@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthManager", "AuthManager\AuthManager.csproj", "{1C2B6257-0055-4087-9819-21EB12137E7A}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CashData", "CashData\CashData.sqlproj", "{FB54D634-05A0-459C-B6E1-39D503CE1D64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashDestopUI", "CashDestopUI\CashDestopUI.csproj", "{4A5BBD46-6020-4B06-B853-C0B566D17841}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,16 @@ Global
 		{1C2B6257-0055-4087-9819-21EB12137E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C2B6257-0055-4087-9819-21EB12137E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C2B6257-0055-4087-9819-21EB12137E7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB54D634-05A0-459C-B6E1-39D503CE1D64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB54D634-05A0-459C-B6E1-39D503CE1D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB54D634-05A0-459C-B6E1-39D503CE1D64}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{FB54D634-05A0-459C-B6E1-39D503CE1D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB54D634-05A0-459C-B6E1-39D503CE1D64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB54D634-05A0-459C-B6E1-39D503CE1D64}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{4A5BBD46-6020-4B06-B853-C0B566D17841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A5BBD46-6020-4B06-B853-C0B566D17841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A5BBD46-6020-4B06-B853-C0B566D17841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A5BBD46-6020-4B06-B853-C0B566D17841}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
