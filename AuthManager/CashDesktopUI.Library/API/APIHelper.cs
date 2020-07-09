@@ -1,4 +1,4 @@
-﻿using CashDestopUI.Models;
+﻿using CashDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,15 +7,16 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CashDestopUI.Helpers
+namespace CashDesktopUI.Library.API
 {
     public class APIHelper : IAPIHelper
     {
         private HttpClient aPIClient;
-
-        public APIHelper()
+        private ILoggedInUserModel _loggedInUser;
+        public APIHelper(ILoggedInUserModel loggedInUser)
         {
             InitializeClient();
+            _loggedInUser = loggedInUser;
         }
         private void InitializeClient()
         {
@@ -52,6 +53,31 @@ namespace CashDestopUI.Helpers
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+        public async Task GetLoggedInUserInfo(string token)
+        {
+            aPIClient.DefaultRequestHeaders.Clear();
+            aPIClient.DefaultRequestHeaders.Accept.Clear();
+            aPIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            aPIClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+            using(HttpResponseMessage response = await aPIClient.GetAsync("api/User"))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
+                    _loggedInUser.CreatedDate = result.CreatedDate;
+                    _loggedInUser.EmailAddress = result.EmailAddress;
+                    _loggedInUser.FirstName = result.FirstName;
+                    _loggedInUser.Id = result.Id;
+                    _loggedInUser.LastName = result.LastName;
+                    _loggedInUser.Token = token;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
             }
         }
     }

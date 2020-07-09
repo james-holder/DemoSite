@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using CashDesktopUI.Library.API;
 using CashDestopUI.Helpers;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,8 @@ namespace CashDestopUI.ViewModels
 			{
 				ErrorMessage = "";
 				var result = await _apiHelper.Authenticate(UserName, Password);
+
+				await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
 			}
 			catch(Exception ex)
 			{
