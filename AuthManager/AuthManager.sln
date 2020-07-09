@@ -9,6 +9,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CashData", "CashData\CashDa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashDestopUI", "CashDestopUI\CashDestopUI.csproj", "{4A5BBD46-6020-4B06-B853-C0B566D17841}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CashData.Library", "CashData.Library\CashData.Library.csproj", "{C6FDF6CA-499B-447E-BB8E-A8495A2A4901}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{4A5BBD46-6020-4B06-B853-C0B566D17841}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A5BBD46-6020-4B06-B853-C0B566D17841}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A5BBD46-6020-4B06-B853-C0B566D17841}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6FDF6CA-499B-447E-BB8E-A8495A2A4901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6FDF6CA-499B-447E-BB8E-A8495A2A4901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6FDF6CA-499B-447E-BB8E-A8495A2A4901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6FDF6CA-499B-447E-BB8E-A8495A2A4901}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
