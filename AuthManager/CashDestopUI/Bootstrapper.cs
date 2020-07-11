@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using CashDesktopUI.Library.API;
+using CashDesktopUI.Library.Helpers;
 using CashDesktopUI.Library.Models;
 using CashDestopUI.Helpers;
 using CashDestopUI.ViewModels;
@@ -34,6 +35,7 @@ namespace CashDestopUI
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<IAPIHelper, APIHelper>()
+                .Singleton<IConfigHelper, ConfigHelper>()
                 .Singleton<ILoggedInUserModel, LoggedInUserModel>();
 
             GetType().Assembly.GetTypes()

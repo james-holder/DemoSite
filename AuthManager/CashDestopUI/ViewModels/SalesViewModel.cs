@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using CashDesktopUI.Library.API;
+using CashDesktopUI.Library.Helpers;
 using CashDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,13 @@ namespace CashDestopUI.ViewModels
     {
 		private BindingList<ProductModel> _products;
 		private int _itemQuantity = 1;
+		IConfigHelper _configHelper;
 		private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
 		IProductEndPoint _productEndPoint;
 
-		public SalesViewModel(IProductEndPoint productEndPoint)
+		public SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper)
 		{
+			_configHelper = configHelper;
 			_productEndPoint = productEndPoint;
 		}
 		protected override async void OnViewLoaded(object view)
@@ -78,28 +81,47 @@ namespace CashDestopUI.ViewModels
 		{
 			get 
 			{
-				decimal subtotal = 0;
-				foreach (var item in Cart)
-				{
-					subtotal += item.Product.RetailPrice * item.QuantityInCart;
-				}
-				return subtotal.ToString("C");
+				return CalculateSubTotal().ToString("C");
 			}
+		}
+		private decimal CalculateSubTotal()
+		{
+			decimal subtotal = 0;
+			foreach(var item in Cart)
+			{
+				subtotal += item.Product.RetailPrice * item.QuantityInCart;
+			}
+			return subtotal;
+
+		}
+		private decimal CalculateTax()
+		{
+			decimal taxAmount = 0;
+			decimal taxRate = _configHelper.GetTaxRate() / 100;
+
+			foreach(var item in Cart)
+			{
+				if(item.Product.IsTaxable)
+				{
+					taxAmount += (item.Product.RetailPrice * item.QuantityInCart * taxRate);
+
+				}
+			}
+			return taxAmount;
 		}
 		public string Total
 		{
 			get
 			{
-				//TODO - Replace with calculation
-				return "$0.00";
+				decimal total = CalculateSubTotal() + CalculateTax();
+				return total.ToString("C");
 			}
 		}
 		public string Tax
 		{
 			get
 			{
-				//TODO - Replace with calculation
-				return "$0.00";
+				return CalculateTax().ToString("C");
 			}
 		}
 		public bool CanAddToCart
@@ -140,6 +162,9 @@ namespace CashDestopUI.ViewModels
 			SelectedProduct.QuantityInStock -= ItemQuantity;
 			ItemQuantity = 1;
 			NotifyOfPropertyChange (() => SubTotal);
+			NotifyOfPropertyChange(() => Tax);
+			NotifyOfPropertyChange(() => Total);
+
 
 		}
 		public bool CanRemoveFromCart
@@ -159,6 +184,9 @@ namespace CashDestopUI.ViewModels
 		public void RemoveFromCart()
 		{
 			NotifyOfPropertyChange(() => SubTotal);
+			NotifyOfPropertyChange(() => Tax);
+			NotifyOfPropertyChange(() => Total);
+
 		}
 		public bool CanCheckOut
 		{
