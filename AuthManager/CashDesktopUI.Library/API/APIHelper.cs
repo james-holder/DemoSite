@@ -11,19 +11,20 @@ namespace CashDesktopUI.Library.API
 {
     public class APIHelper : IAPIHelper
     {
-        private HttpClient aPIClient;
+        private HttpClient _apiClient;
         private ILoggedInUserModel _loggedInUser;
         public APIHelper(ILoggedInUserModel loggedInUser)
         {
             InitializeClient();
             _loggedInUser = loggedInUser;
         }
+        public HttpClient ApiClient { get { return _apiClient; } }
         private void InitializeClient()
         {
-            aPIClient = new HttpClient();
-            aPIClient.BaseAddress = new Uri(ConfigurationManager.AppSettings["AuthApi"]);
-            aPIClient.DefaultRequestHeaders.Accept.Clear();
-            aPIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            _apiClient = new HttpClient();
+            _apiClient.BaseAddress = new Uri(ConfigurationManager.AppSettings["AuthApi"]);
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
         public async Task<AuthenticatedUser> Authenticate(string username, string password)
         {
@@ -37,7 +38,7 @@ namespace CashDesktopUI.Library.API
                 new KeyValuePair<string, string>("username", username),
                 new KeyValuePair<string, string>("password", password)
             });
-                using(HttpResponseMessage response = await aPIClient.PostAsync("/token", data))
+                using(HttpResponseMessage response = await _apiClient.PostAsync("/token", data))
                 {
                     if(response.IsSuccessStatusCode)
                     {
@@ -57,12 +58,12 @@ namespace CashDesktopUI.Library.API
         }
         public async Task GetLoggedInUserInfo(string token)
         {
-            aPIClient.DefaultRequestHeaders.Clear();
-            aPIClient.DefaultRequestHeaders.Accept.Clear();
-            aPIClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            aPIClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            _apiClient.DefaultRequestHeaders.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-            using(HttpResponseMessage response = await aPIClient.GetAsync("api/User"))
+            using(HttpResponseMessage response = await _apiClient.GetAsync("api/User"))
             {
                 if(response.IsSuccessStatusCode)
                 {

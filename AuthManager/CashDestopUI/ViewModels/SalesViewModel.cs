@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using CashDesktopUI.Library.API;
+using CashDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,11 +12,27 @@ namespace CashDestopUI.ViewModels
 {
     public class SalesViewModel : Screen
     {
-		private BindingList<string> _products;
-		private int _itemQuantity;
-		private BindingList<string> _cart;
+		private BindingList<ProductModel> _products;
+		private int _itemQuantity = 1;
+		private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+		IProductEndPoint _productEndPoint;
 
-		public BindingList<string> Products
+		public SalesViewModel(IProductEndPoint productEndPoint)
+		{
+			_productEndPoint = productEndPoint;
+		}
+		protected override async void OnViewLoaded(object view)
+		{
+			base.OnViewLoaded(view);
+			await LoadProducts();
+		}
+		public async Task LoadProducts()
+		{
+			var productList = await _productEndPoint.GetAll();
+			Products = new BindingList<ProductModel>(productList);	
+			
+		}
+		public BindingList<ProductModel> Products
 		{
 			get { return _products; }
 			set 
@@ -23,8 +41,20 @@ namespace CashDestopUI.ViewModels
 				NotifyOfPropertyChange(() => Products);
 			}
 		}
+		private ProductModel _selectedProduct;
 
-		public BindingList<string> Cart
+		public ProductModel SelectedProduct
+		{
+			get { return _selectedProduct; }
+			set 
+			{
+				_selectedProduct = value;
+				NotifyOfPropertyChange(() => SelectedProduct);
+				NotifyOfPropertyChange(() => CanAddToCart);
+			}
+		}
+
+		public BindingList<CartItemModel> Cart
 		{
 			get { return _cart; }
 			set 
@@ -40,15 +70,20 @@ namespace CashDestopUI.ViewModels
 			{ 
 				_itemQuantity = value;
 				NotifyOfPropertyChange(() => ItemQuantity);
+				NotifyOfPropertyChange(() => CanAddToCart);
 			}
 		}
 
 		public string SubTotal
 		{
 			get 
-			{ 
-				//TODO - Replace with calculation
-				return "$0.00"; 
+			{
+				decimal subtotal = 0;
+				foreach (var item in Cart)
+				{
+					subtotal += item.Product.RetailPrice * item.QuantityInCart;
+				}
+				return subtotal.ToString("C");
 			}
 		}
 		public string Total
@@ -73,14 +108,38 @@ namespace CashDestopUI.ViewModels
 			{
 				bool output = false;
 
-				//Make sure something is selected
-				//Make sure there is an item quantity
+				if(ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity)
+				{
+					output = true;
+				}
 
 				return output;
 			}
 		}
 		public void AddToCart()
 		{
+			CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+
+			if (existingItem != null)
+			{
+				existingItem.QuantityInCart += ItemQuantity;
+				Cart.Remove(existingItem);
+				Cart.Add(existingItem);
+
+			}
+			else
+			{
+				CartItemModel item = new CartItemModel()
+				{
+					Product = SelectedProduct,
+					QuantityInCart = ItemQuantity
+
+				};
+				Cart.Add(item);
+			}
+			SelectedProduct.QuantityInStock -= ItemQuantity;
+			ItemQuantity = 1;
+			NotifyOfPropertyChange (() => SubTotal);
 
 		}
 		public bool CanRemoveFromCart
@@ -89,15 +148,17 @@ namespace CashDestopUI.ViewModels
 			{
 				bool output = false;
 
-				//Make sure something is selected
-				//Make sure there is an item quantity
+				if (SelectedProduct?.QuantityInStock >= ItemQuantity)
+				{
+					output = true;
+				}
 
 				return output;
 			}
 		}
 		public void RemoveFromCart()
 		{
-
+			NotifyOfPropertyChange(() => SubTotal);
 		}
 		public bool CanCheckOut
 		{

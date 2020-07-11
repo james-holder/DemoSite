@@ -1,4 +1,5 @@
 ﻿using CashDesktopUI.Library.Models;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CashDesktopUI.Library.API
@@ -7,5 +8,6 @@ namespace CashDesktopUI.Library.API
     {
         Task<AuthenticatedUser> Authenticate(string username, string password);
         Task GetLoggedInUserInfo(string token);
+        HttpClient ApiClient { get; }
     }
 }
