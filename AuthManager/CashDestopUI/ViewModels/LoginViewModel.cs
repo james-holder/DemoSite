@@ -13,8 +13,8 @@ namespace CashDestopUI.ViewModels
     public class LoginViewModel : Screen
     {
 
-		private string _userName;
-		private string _password;
+		private string _userName = "texdood@yahoo.com";
+		private string _password = "Andrew90!";
 		private string _errorMessage;
 		private IAPIHelper _apiHelper;
 		private IEventAggregator _events;

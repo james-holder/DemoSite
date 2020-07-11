@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthManager", "AuthManager\AuthManager.csproj", "{1C2B6257-0055-4087-9819-21EB12137E7A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthDataManager", "AuthManager\AuthDataManager.csproj", "{1C2B6257-0055-4087-9819-21EB12137E7A}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CashData", "CashData\CashData.sqlproj", "{FB54D634-05A0-459C-B6E1-39D503CE1D64}"
 EndProject

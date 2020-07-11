@@ -18,11 +18,13 @@ namespace CashDestopUI.ViewModels
 		IConfigHelper _configHelper;
 		private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
 		IProductEndPoint _productEndPoint;
+		ISaleEndPoint _saleEndPoint;
 
-		public SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper)
+		public SalesViewModel(IProductEndPoint productEndPoint, IConfigHelper configHelper, ISaleEndPoint saleEndPoint)
 		{
 			_configHelper = configHelper;
 			_productEndPoint = productEndPoint;
+			_saleEndPoint = saleEndPoint;
 		}
 		protected override async void OnViewLoaded(object view)
 		{
@@ -160,7 +162,7 @@ namespace CashDestopUI.ViewModels
 			NotifyOfPropertyChange (() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
-
+			NotifyOfPropertyChange(() => CanCheckOut);
 
 		}
 		public bool CanRemoveFromCart
@@ -182,7 +184,7 @@ namespace CashDestopUI.ViewModels
 			NotifyOfPropertyChange(() => SubTotal);
 			NotifyOfPropertyChange(() => Tax);
 			NotifyOfPropertyChange(() => Total);
-
+			NotifyOfPropertyChange(() => CanCheckOut);
 		}
 		public bool CanCheckOut
 		{
@@ -190,15 +192,27 @@ namespace CashDestopUI.ViewModels
 			{
 				bool output = false;
 
-				//Make sure something is selected
-				//Make sure there is an item quantity
+				if (Cart.Count > 0)
+				{
+					output = true;
+				}				
 
 				return output;
 			}
 		}
-		public void CheckOut()
+		public async Task CheckOut()
 		{
+			SaleModel sale = new SaleModel();
 
+			foreach (var item in Cart)
+			{
+				sale.SaleDetails.Add(new SaleDetailModel
+				{
+					ProductId = item.Product.Id,
+					Quantity = item.QuantityInCart
+				});
+			}
+			await _saleEndPoint.PostSale(sale);
 		}
 
 	}
