@@ -16,7 +16,7 @@ namespace CashData.Library.DataAccess
             // Start filling in the models that we need to save to the database
             List<SaleDetailDBModel> details = new List<SaleDetailDBModel>();
             ProductData products = new ProductData();
-            var taxRate = ConfigHelper.GetTaxRate();
+            var taxRate = ConfigHelper.GetTaxRate() / 100 ;
 
             foreach(var item in saleInfo.SaleDetails)
             {
@@ -63,7 +63,7 @@ namespace CashData.Library.DataAccess
             details.ForEach(x =>
             {
                 x.SaleId = sale.Id;
-                sql.SaveData("dbo.spSaleDetail_Insert", details, "CashConnection");
+                sql.SaveData("dbo.spSaleDetail_Insert", x, "CashConnection");
 
             });
 
